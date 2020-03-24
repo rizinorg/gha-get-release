@@ -12,6 +12,7 @@ async function run() {
     // Get the tag name from the triggered action
     const tagName = context.ref;
 
+    console.log(`tagname: ${tagName}`);
     // This removes the 'refs/tags' portion of the string, i.e. from 'refs/tags/v1.10.15' to 'v1.10.15'
     const tag = tagName.replace("refs/tags/", "");
 
@@ -24,13 +25,17 @@ async function run() {
       tag
     });
 
+    console.log(`resp: ${getReleaseResponse}`);
+
     // Get the ID, html_url, and upload URL for the created Release from the response
     const {
       data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl }
     } = getReleaseResponse;
 
+    console.log(`res: ${releaseId} ${htmlUrl} ${uploadUrl}`);
+
     // Set the output variables for use by other actions: https://github.com/actions/toolkit/tree/master/packages/core#inputsoutputs
-    core.setOutput("id", releaseId);
+    core.setOutput("id", String(releaseId));
     core.setOutput("html_url", htmlUrl);
     core.setOutput("upload_url", uploadUrl);
   } catch (error) {
