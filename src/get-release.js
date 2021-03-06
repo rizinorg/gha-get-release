@@ -17,16 +17,31 @@ async function run() {
 
     // Get a release from the tag name
     // API Documentation: https://developer.github.com/v3/repos/releases/#create-a-release
-    // Octokit Documentation: https://octokit.github.io/rest.js/#octokit-routes-repos-create-release
-    const getReleaseResponse = await github.repos.getReleaseByTag({
-      owner,
-      repo,
-      tag
+    // Octokit Documentation: https://octokit.github.io/rest.js/v18#repos-list-releases
+    //const getReleaseResponse = await github.repos.getReleaseByTag({
+    //  owner,
+    //  repo,
+    //  tag
+    //});
+    // getReleaseByTag doesn't return draft releases
+    const releases = await github.repos.listReleases({owner, repo});
+
+
+    let getReleaseResponse = null;
+    releases.data.forEach(release => {
+      if (release.tag_name == tag) {
+        getReleaseResponse = release;
+      }
     });
+
+    if (getReleaseResponse == null) {
+      core.setFailed(`Release with tag '${tag}' not found`);
+      return;
+    }
 
     // Get the outputs for the created release from the response
     const {
-      data: { id: releaseId, html_url: htmlUrl, upload_url: uploadUrl, name: name, body: body, draft: draft, prerelease: prerelease }
+       id: releaseId, html_url: htmlUrl, upload_url: uploadUrl, name: name, body: body, draft: draft, prerelease: prerelease 
     } = getReleaseResponse;
 
     console.log(`Got release info: '${releaseId}', '${htmlUrl}', '${uploadUrl}', '${name}', '${draft}', '${prerelease}', '${body}'`);
