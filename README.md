@@ -1,4 +1,4 @@
-# GitHub Action - Get a Releases
+# GitHub Action - Get a Release
 
 This GitHub Action (written in JavaScript) wraps the [GitHub Release API](https://developer.github.com/v3/repos/releases/), specifically the [Get a Release](https://developer.github.com/v3/repos/releases/#create-a-release) endpoint, to allow you to leverage GitHub Actions to get releases.
 
@@ -21,7 +21,7 @@ For more information on these outputs, see the [API Documentation](https://devel
 
 ### Example workflow
 
-Everytime a new release is created, build a binary for the release and upload it to the release on Github. This example is building and uploading a Linux binary for a Rust executable.
+Everytime a new release is created, build a binary for the release and upload it to the release on GitHub. This example is building and uploading a Linux binary for a Rust executable.
 
 ```yaml
 on:
@@ -38,7 +38,7 @@ jobs:
 
       - name: Get release
         id: get_release
-        uses: bruceadams/get-release@v1.2.2
+        uses: bruceadams/get-release@v1.3.2
         env:
           GITHUB_TOKEN: ${{ github.token }}
 
